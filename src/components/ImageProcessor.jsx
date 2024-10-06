@@ -33,7 +33,7 @@ const ImageProcessor = () => {
     const starLimit = document.getElementById('limit').value;
 
     try {
-      const response = await fetch('/api/procesar_imagen', {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/procesar_imagen`, { 
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -111,7 +111,7 @@ const ImageProcessor = () => {
       required
       style={{
         padding: '30px',
-        fontSize: '1.5em',  // Increased font size
+        fontSize: '1.5em',  
         width: '100%',
         backgroundColor: '#000',
         color: '#fff',
@@ -133,7 +133,7 @@ const ImageProcessor = () => {
       required
       style={{
         padding: '30px',
-        fontSize: '1.5em',  // Increased font size
+        fontSize: '1.5em',  
         width: '100%',
         backgroundColor: '#000',
         color: '#fff',
