@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import '../index.css'; // Assuming you put the CSS here
+import '../index.css'; 
 
 const ImageProcessor = () => {
   const [result, setResult] = useState(null);
@@ -8,7 +8,7 @@ const ImageProcessor = () => {
   const [processedImage, setProcessedImage] = useState(null);
   const [audioUrl, setAudioUrl] = useState(null);
 
-  const baseOutputUrl = 'http://20.81.208.230:5000/output/';
+  const baseOutputUrl = import.meta.env.VITE_API_URL + '/output/';
 
   const imageUrls = [
     'https://res.cloudinary.com/dsaw5z3ot/image/upload/v1728179558/0cb41355-f4c6-45c0-a74e-36b60ccb014f.png',
