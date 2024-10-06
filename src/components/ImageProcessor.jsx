@@ -1,5 +1,7 @@
 import { useState } from 'react';
 import '../index.css'; 
+import fullscreenIcon from '../assets/fullscreen-svgrepo-com.svg';
+
 
 const ImageProcessor = () => {
   const [result, setResult] = useState(null);
@@ -7,7 +9,7 @@ const ImageProcessor = () => {
   const [error, setError] = useState(null);
   const [processedImage, setProcessedImage] = useState(null);
   const [audioUrl, setAudioUrl] = useState(null);
-
+  const [isFullscreen, setIsFullscreen] = useState(false);
   const baseOutputUrl = import.meta.env.VITE_API_URL + '/output/';
 
   const imageUrls = [
@@ -22,6 +24,10 @@ const ImageProcessor = () => {
     'https://res.cloudinary.com/dsaw5z3ot/image/upload/v1728179231/2cbb4b5b-74dd-486a-9b89-4ccf08eaefae.png',
     'https://res.cloudinary.com/dsaw5z3ot/image/upload/v1728179209/9b58d9ad-563d-4b5d-9ba6-3b9019fd32a5.png'
   ];
+
+  const toggleFullscreen = () => {
+    setIsFullscreen(!isFullscreen);
+  };
 
   const processImage = async (imageUrl) => {
     setIsLoading(true);
@@ -61,7 +67,6 @@ const ImageProcessor = () => {
       setIsLoading(false);
     }
   };
-
   return (
     <div style={{
       fontFamily: 'Arial, sans-serif',
@@ -70,6 +75,57 @@ const ImageProcessor = () => {
       minHeight: '100vh',
       padding: '20px'
     }}>
+      <style>
+        {`
+          .image-container {
+            position: relative;
+            display: inline-block;
+          }
+          .fullscreen-overlay {
+            position: absolute;
+            top: 0;
+            left: 50%; 
+            transform: translateX(-50%);            
+            width: 50%;
+            height: 98%;
+            display: flex;
+            justify-content: flex-end;
+            align-items: flex-start;
+            background-color: rgba(0, 0, 0, 0);
+            transition: background-color 0.3s;
+            cursor: pointer;
+          }
+          .fullscreen-overlay:hover {
+            background-color: rgba(0, 0, 0, 0.5);
+          }
+          .fullscreen-icon {
+            opacity: 0;
+            transition: opacity 0.3s;
+            width: 40px;
+            height: 40px;
+            margin: 10px;
+          }
+          .fullscreen-overlay:hover .fullscreen-icon {
+            opacity: 1;
+          }
+          .fullscreen-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: rgba(0, 0, 0, 0.9);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+          }
+          .fullscreen-modal img {
+            max-width: 90%;
+            max-height: 90%;
+          }
+        `}
+      </style>
       <style>
         {`
           .loader { width: 32px; height: 90px; display: block; margin: 20px auto; position: relative; border-radius: 50% 50% 0 0; border-bottom: 10px solid #FF3D00; background-color: #FFF; background-image: radial-gradient(ellipse at center, #FFF 34%, #FF3D00 35%, #FF3D00 54%, #FFF 55%), linear-gradient(#FF3D00 10px, transparent 0); background-size: 28px 28px; background-position: center 20px , center 2px; background-repeat: no-repeat; box-sizing: border-box; animation: animloaderBack 1s linear infinite alternate; }
@@ -160,11 +216,11 @@ const ImageProcessor = () => {
 </div>
 
 
-          {/* Right column: Processed Image */}
-          <div>
-            {processedImage && (
-              <div>
-                <h3 style={{ color: 'white', marginBottom: '10px' }}>Processed Image</h3>
+<div>
+          {processedImage && (
+            <div>
+              <h3 style={{ color: 'white', marginBottom: '10px' }}>Processed Image</h3>
+              <div className="image-container">
                 <img 
                   src={processedImage} 
                   alt="Processed star map" 
@@ -173,9 +229,28 @@ const ImageProcessor = () => {
                     borderRadius: '10px'
                   }}
                 />
+                <div className="fullscreen-overlay" onClick={toggleFullscreen}>
+                  <img 
+                    src={fullscreenIcon} 
+                    alt="Fullscreen" 
+                    className="fullscreen-icon"
+                  />
+                </div>
               </div>
-            )}
+            </div>
+          )}
+        </div>
+
+        {/* Fullscreen Modal */}
+        {isFullscreen && (
+          <div className="fullscreen-modal" onClick={toggleFullscreen}>
+            <img 
+              src={processedImage} 
+              alt="Processed star map fullscreen" 
+            />
           </div>
+        )}
+
         </div>
 
         <h2 style={{ color: 'white', marginTop: '20px' }}>Select an Image</h2>
